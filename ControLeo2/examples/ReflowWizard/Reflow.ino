@@ -357,15 +357,10 @@ boolean Reflow() {
       // Update the displayed temperature roughly once per second
       if (counter++ % 20 == 0) {
         displayReflowTemperature(currentTime, reflowStartTime, phaseStartTime, currentTemperature);
-        // Countdown to the end of this phase
-        lcd.setCursor(13, 0);
-        lcd.print(30 - ((currentTime - phaseStartTime) / MILLIS_TO_SECONDS));
-        lcd.print("s ");
       }
        
-      // Wait in this phase for 30 seconds.  The maximum time in liquidous state is 150 seconds
-      // Max 40 seconds in PHASE_REFLOW + 30 seconds in PHASE_WAITING + some cool down time in PHASE_COOLING_BOARDS_IN is less than 150 seconds.
-      if (currentTime - phaseStartTime > 30 * MILLIS_TO_SECONDS) {
+      // Wait in this phase until the temperature drops back below the temperature at the end of the soak phase
+      if (currentTemperature < phase[PHASE_SOAK].endTemperature) {
         reflowPhase = PHASE_COOLING_BOARDS_IN;
         firstTimeInPhase = true;
       }
