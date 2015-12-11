@@ -112,8 +112,8 @@ void setup() {
   initializeTimer();
 
   // Write the initial message on the LCD screen
-  lcdPrintLine(0, "   ControLeo2");
-  lcdPrintLine(1, "Reflow Oven v1.5");
+  lcdPrintLine(0, "ControLeo2 v1.5");
+  lcdPrintLine(1, "   SMD291SNL");
   delay(100);
   playTones(TUNE_STARTUP);
   delay(3000);
@@ -127,6 +127,7 @@ void setup() {
     mode = 2;
   
   Serial.println(F("ControLeo2 Reflow Oven controller v1.5"));
+  Serial.println(F("Chip Quik SMD291SNL profile"));
   
   // Make sure the oven door is closed
   setServoPosition(getSetting(SETTING_SERVO_CLOSED_DEGREES), 1000);

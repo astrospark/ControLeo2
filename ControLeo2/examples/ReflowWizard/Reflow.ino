@@ -151,19 +151,19 @@ boolean Reflow() {
         // Keep in mind that there is a 2C error in the MAX31855, and typically a 3C error in the thermocouple.
         switch(i) {
           case PHASE_PRESOAK:
-            phase[i].endTemperature = maxTemperature * 3 / 5; // J-STD-20 gives 150C
-            phase[i].phaseMinDuration = 60;
-            phase[i].phaseMaxDuration = 100;
+            phase[i].endTemperature = maxTemperature * 3 / 5; // 90s to 150C
+            phase[i].phaseMinDuration = 80;
+            phase[i].phaseMaxDuration = 110;
             break;
           case PHASE_SOAK:
-            phase[i].endTemperature = maxTemperature * 4 / 5; // J-STD-20 gives 200C
-            phase[i].phaseMinDuration = 80;
-            phase[i].phaseMaxDuration = 140;
+            phase[i].endTemperature = maxTemperature * 7 / 8; // 120s to 217C
+            phase[i].phaseMinDuration = 110;
+            phase[i].phaseMaxDuration = 130;
             break;
           case PHASE_REFLOW:
-            phase[i].endTemperature = maxTemperature;
-            phase[i].phaseMinDuration = 60;
-            phase[i].phaseMaxDuration = 100;
+            phase[i].endTemperature = maxTemperature; // 30s to 249C
+            phase[i].phaseMinDuration = 30;
+            phase[i].phaseMaxDuration = 40;
             break;
         }
       }
@@ -359,13 +359,13 @@ boolean Reflow() {
         displayReflowTemperature(currentTime, reflowStartTime, phaseStartTime, currentTemperature);
         // Countdown to the end of this phase
         lcd.setCursor(13, 0);
-        lcd.print(40 - ((currentTime - phaseStartTime) / MILLIS_TO_SECONDS));
+        lcd.print(30 - ((currentTime - phaseStartTime) / MILLIS_TO_SECONDS));
         lcd.print("s ");
       }
        
-      // Wait in this phase for 40 seconds.  The maximum time in liquidous state is 150 seconds
-      // Max 90 seconds in PHASE_REFLOW + 40 seconds in PHASE_WAITING + some cool down time in PHASE_COOLING_BOARDS_IN is less than 150 seconds.
-      if (currentTime - phaseStartTime > 40 * MILLIS_TO_SECONDS) {
+      // Wait in this phase for 30 seconds.  The maximum time in liquidous state is 150 seconds
+      // Max 40 seconds in PHASE_REFLOW + 30 seconds in PHASE_WAITING + some cool down time in PHASE_COOLING_BOARDS_IN is less than 150 seconds.
+      if (currentTime - phaseStartTime > 30 * MILLIS_TO_SECONDS) {
         reflowPhase = PHASE_COOLING_BOARDS_IN;
         firstTimeInPhase = true;
       }
